@@ -95,6 +95,7 @@
         <div class="menu-item" onclick="setTemplate('new')">new</div>
         <div class="menu-item">examples
           <div class="menu-item-dropdown-content">
+            <i onclick="setTemplate('calibrate')">calibrate</i>
             <i onclick="setTemplate('line-vase')">line vase</i>
             <i onclick="setTemplate('2point5D-sketching')">2.5D sketching</i>
             <i onclick="setTemplate('ripple')">ripple texture</i>
@@ -112,7 +113,7 @@
             <i onclick="setPrinter('q5')">Flsun Q5</i>
           </div>
         </div> 
-        <div class="menu-item" onclick="updatePreview()">visualize</div>
+        <div class="menu-item" onclick="updatePreview()">refresh</div>
         <div class="menu-item" onclick="evaluateJs('_fab.serial.requestPort();')">connect</div>
         <div class="menu-item" onclick="evaluateJs('_fab.print();')">start print</div>
         <div class="menu-item" onclick="evaluateJs('_fab.stopPrint();')">stop print</div>
