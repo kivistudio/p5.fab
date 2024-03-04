@@ -26,7 +26,6 @@ let myp5 = new p5(s, 'sketch-container');
 
 
 function makeCube() {
-  
   // variables for our hollow cube!
   let sideLength = 50; //mm
   let x = fab.centerX; 
@@ -46,12 +45,6 @@ function makeCube() {
   }
 
   fab.presentPart();
-}
-
-function drawBlob() {
-  fab.moveRetract(fab.centerX, fab.centerY, 0.5); // moveRetract will move the nozzle without extruding filament
-  fab.moveExtrude(fab.centerX, fab.centerY, 2, 0.5, 5);
-  fab.presentPart(); // pull the nozzle away, and retract a bit of filament to stop oozing!
 }
 
 function drawInitialLine() {
@@ -81,76 +74,3 @@ function drawSpiral() {
   }
   fab.presentPart();
 }
-
-function makeHollowCube() {
-  
-  // variables for our hollow cube!
-  let sideLength = 50; //mm
-  let x = fab.centerX; 
-  let y = fab.centerY;
-  let speed = 10; // mm/sec
-  let layerHeight = 0.2; // mm
-
-  // design our hollow cube!
-  fab.moveRetract(x, y, layerHeight); // move to the start (x,y,z) position without extruding
-
-  for (let z = layerHeight; z <= sideLength; z += layerHeight) { 
-    if (z == layerHeight) { // if it's the first layer
-    speed = 10; // slow print speeed down for the first layer
-    }
-    else {
-      speed = 25;
-    }
-    fab.moveExtrude(x + sideLength, y, z, speed); // move along the bottom side while extruding filament
-    fab.moveExtrude(x + sideLength, y + sideLength, z, speed); // right side
-    fab.moveExtrude(x, y + sideLength, z, speed); // top side
-    fab.moveExtrude(x, y, z, speed); //left side
-  }
-
-  fab.presentPart();
-  fab.render();
-}
-
-function makeVase() {
-  // setup printing variables
-  // this is a standard setup block:
-  fab.fanOff();
-    
-  /* design your artifact here!
-   *  here's a vase line vase, based on LIA's 'Filament Sculptures' 
-   * https://www.liaworks.com/theprojects/filament-sculptures/
-   */
-
-  let startHeight = 0.2;
-  let o = 2;
-  let s = 40;
-  let x = fab.centerX;
-  let y = fab.centerY;
-  let sf = 0;
-  let maxL = 40;
-  let l = 40;
-  fab.moveRetract(x, y, startHeight); // move to start
-  //for (let h = startHeight; h <= l; h += o) { 
-    // lines
-    let h = startHeight;
-    /*fab.moveExtrude(x + l, y+sf, h);
-    fab.moveExtrude(x + l - sf, y + l, h);
-    fab.moveExtrude(x, y + l - sf, h);
-    fab.moveExtrude(x + sf, y, h);*/
-
-    // dots
-    fab.moveExtrude(x, y, h + o, 0.4, 10); // move slowly and extrude lots of filament on the dots
-    fab.moveRetract(x + l, y, h, 3 * s); // move quickly from point to point to reduce stringing
-    fab.moveExtrude(x + l, y, h + o, 0.4, 10);
-    fab.moveRetract(x + l - sf, y + l, h, 3 * s);
-    fab.moveExtrude(x + l - sf, y + l, h + o, 0.4, 10);
-    fab.moveRetract(x, y + l - sf, h, 3 * s);
-    fab.moveExtrude(x, y + l - sf, h + o, 0.4, 10);
-
-    fab.moveRetract(x + sf, y, h + o, s);
-  //}
-  // end artifact
-
-  fab.presentPart(); // pop the bed out. 
-}
-

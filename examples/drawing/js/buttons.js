@@ -21,7 +21,7 @@ function triggerDrawSpiral() {
 }
 
 function triggerDrawHollowCube() {
-  makeHollowCube();
+  makeCube();
   fab.refreshModel();
 }
 
