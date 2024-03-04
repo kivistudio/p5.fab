@@ -1,33 +1,29 @@
 let fab;
 
-let speedInput;
-let speedValueText;
-
-let extrudeSlider;
-let extrudeSliderText;
-
-let speed = 300;
-let extrudeRate = 100;
-
-const printerSettings = {
-  "name": "Q5",
-  "baudRate": 115200,
-  "radius": 100,
-  "maxZ": 200,
-  "nozzleDiameter": 1,
-  "filamentDiameter": 1.75,
-  "coordinateSystem": "delta"
-};
-
-function setup() {
-    let width = 600;
-    let height = 400;
-    let canvas = createCanvas(width, height, WEBGL);
-    canvas.parent('sketch-container');
-    fab = createFab();
-
+var s = ( p5Instance ) => { // p could be any variable name
+  p5Instance.setup = function() {
+    p5Instance.createCanvas(600, 400, p5Instance.WEBGL);
+    fab = p5Instance.createFab();
     fab.configure(printerSettings);
+  };
+
+  p5Instance.fabDraw = function() {
+    // setup!
+    fab.setAbsolutePosition(); // set the coordinate system mode
+    fab.setERelative(); // it's easier to work with the extruder axis in relative positioning
+    fab.autoHome(); // establish a (0,0,0)
+    fab.setTemps(210, 60); // (bedTemp, nozzleTemp). hot!
+  }
+
+  p5Instance.draw = function() {
+    p5Instance.orbitControl(2, 2, 0.1);
+    p5Instance.background(255);
+    fab.render();
+  };
 }
+
+let myp5 = new p5(s, 'sketch-container');
+
 
 function makeCube() {
   
@@ -52,14 +48,6 @@ function makeCube() {
   fab.presentPart();
 }
 
-function fabDraw() {
-  // setup!
-  fab.setAbsolutePosition(); // set the coordinate system mode
-  fab.setERelative(); // it's easier to work with the extruder axis in relative positioning
-  fab.autoHome(); // establish a (0,0,0)
-  fab.setTemps(210, 60); // (bedTemp, nozzleTemp). hot!
-}
-
 function drawBlob() {
   fab.moveRetract(fab.centerX, fab.centerY, 0.5); // moveRetract will move the nozzle without extruding filament
   fab.moveExtrude(fab.centerX, fab.centerY, 2, 0.5, 5);
@@ -74,14 +62,14 @@ function drawSpiral() {
   // make a spiral!
   let r = 80; // outer radius
   let numSpirals = 8; // how many concentric spirals to make
-  let center = createVector(fab.centerX, fab.centerY); // center the spiral on the print bed
+  let center = myp5.createVector(fab.centerX, fab.centerY); // center the spiral on the print bed
   let z = 0.2;
-  let step = TWO_PI / 100;
+  let step = myp5.TWO_PI / 100;
   let speed = 10; // move slowly for adhesion
 
-  for (let angle = 0; angle <= numSpirals * TWO_PI; angle += step) {
-    let x = r * cos(angle);
-    let y = r * sin(angle);
+  for (let angle = 0; angle <= numSpirals * myp5.TWO_PI; angle += step) {
+    let x = r * myp5.cos(angle);
+    let y = r * myp5.sin(angle);
 
     if (angle == 0) {
       fab.moveRetract(center.x + x, center.y + y, z, 3 * speed);
@@ -164,12 +152,5 @@ function makeVase() {
   // end artifact
 
   fab.presentPart(); // pop the bed out. 
-}
-
-function draw() {
-  orbitControl(2, 2, 0.1);
-  background(255);
-  
-  fab.render();
 }
 
