@@ -47,7 +47,11 @@ var isDrawingJustStarted = false;
 /***********************
 *    DRAWING CANVAS    *
 ************************/
-new p5(function(p) {
+
+let verticesToDraw = [];
+let currentVertexArray;
+
+let drawingp5 = new p5(function(p) {
   
   p.setup = function() {
     
@@ -74,7 +78,8 @@ new p5(function(p) {
       initPressure();
     }
 
-    if(isDrawing) {      
+    if(isDrawing) {
+      let currentVertex = {};
       // Smooth out the position of the pointer 
       penX = xFilter.filter(p.mouseX, p.millis());
       penY = yFilter.filter(p.mouseY, p.millis());
@@ -82,23 +87,27 @@ new p5(function(p) {
       // What to do on the first frame of the stroke
       if(isDrawingJustStarted) {
         console.log("started drawing");
+        currentVertexArray = [];
+        verticesToDraw.push(currentVertexArray);
         prevPenX = penX;
         prevPenY = penY;
       }
+      currentVertex.x = penX;
+      currentVertex.y = penY;
 
       // Smooth out the pressure
       pressure = pFilter.filter(pressure, p.millis());
-
+      currentVertex.pressure = pressure;
       // Define the current brush size based on the pressure
       brushSize = minBrushSize + (pressure * pressureMultiplier);
-
+      currentVertex.brushSize = brushSize;
       // Calculate the distance between previous and current position
       d = p.dist(prevPenX, prevPenY, penX, penY);
 
       // The bigger the distance the more ellipses
       // will be drawn to fill in the empty space
       inBetween = (d / p.min(brushSize,prevBrushSize)) * brushDensity;
-
+      currentVertex.inBetween = inBetween;
       // Add ellipses to fill in the space 
       // between samples of the pen position
       for(i=1;i<=inBetween;i++){
@@ -120,12 +129,30 @@ new p5(function(p) {
       prevBrushSize = brushSize; 
       prevPenX = penX;
       prevPenY = penY;
-      
+      currentVertexArray.push(currentVertex);
       isDrawingJustStarted = false;
     }
     
   }
 }, "p5_instance_01");
+
+function drawCurve() {
+  console.log(verticesToDraw)
+  for(var i = 0; i < verticesToDraw.length; i++){
+    drawingp5.noFill();
+    drawingp5.stroke('orange');
+    drawingp5.beginShape();
+    
+    let v0 = verticesToDraw[i][0];
+    drawingp5.curveVertex(v0.x, v0.y);
+    for(var j = 1; j < verticesToDraw[i].length; j++){
+      var v = verticesToDraw[i][j];
+      drawingp5.strokeWeight(2);
+      drawingp5.curveVertex(v.x, v.y);
+    }
+    drawingp5.endShape();
+  }
+}
 
 
 /***********************
@@ -189,7 +216,6 @@ function initPressure() {
           console.log("Pressure.js initialized successfully");
 	        isPressureInit = true;
       	}
-        console.log(force);
         pressure = force;
         
       }

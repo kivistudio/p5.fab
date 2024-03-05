@@ -11,7 +11,10 @@ function triggerStop() {
 }
 
 function triggerHome() {
-  fab.autoHome(); // go to home
+  fab.setAbsolutePosition(); // set the coordinate system mode
+  fab.setERelative(); // it's easier to work with the extruder axis in relative positioning
+  fab.autoHome(); // establish a (0,0,0)
+  fab.setTemps(210, 60); // (bedTemp, nozzleTemp). hot!
   fab.print();
 }
 
@@ -40,4 +43,25 @@ function updateFlowPercent(newFlowPercent) {
   const value = document.querySelector("#flowPercent");
   value.textContent = newFlowPercent;
   fab.overrideExtrudeRate(newFlowPercent);
+}
+
+function triggerDrawingFromVertices() {
+  drawVertices();
+  fab.refreshModel();
+}
+
+function goUp() {
+  drawVerticesUp();
+  fab.refreshModel();
+}
+
+// Drawing
+
+function clearSketch() {
+  verticesToDraw = [];
+  drawCanvas.clear();
+}
+
+function drawTrialCurve() {
+  drawCurve();
 }

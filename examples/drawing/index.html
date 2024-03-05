@@ -42,6 +42,10 @@
       border: 3px solid black;
     }
 
+    button {
+      border: 3px solid black;
+    }
+
     #uiCanvas {
       position: absolute;
       top: 0;
@@ -61,6 +65,16 @@
   <script src="./js/drawing-sketch/sketch.js"></script>
   <script src="./js/sketch.js"></script>
   <script src="./js/buttons.js"></script>
+  <!--from https://bg.ibelick.com/ -->
+  <div
+    class="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
+  </div>
+  <div
+    class="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
+    <div
+      class="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#C9EBFF,transparent)]">
+    </div>
+  </div>
   <section class="px-16 py-8">
     <!-- title -->
     <div class="flex flex-row">
@@ -136,7 +150,7 @@
                   stroke="black" stroke-width="2.77733" />
               </svg>
             </button>
-            <button>
+            <button onclick="goUp();">
               <svg width="139" height="140" viewBox="0 0 139 140" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M95.8178 43.8781C95.8178 47.315 93.2447 50.7322 88.4069 53.371C83.6217 55.9811 76.916 57.6385 69.4332 57.6385C61.9504 57.6385 55.2448 55.9811 50.4595 53.371C45.6217 50.7322 43.0486 47.315 43.0486 43.8781C43.0486 40.4412 45.6217 37.024 50.4595 34.3852C55.2448 31.775 61.9504 30.1177 69.4332 30.1177C76.916 30.1177 83.6217 31.775 88.4069 34.3852C93.2447 37.024 95.8178 40.4412 95.8178 43.8781Z"
@@ -157,8 +171,37 @@
               </svg>
             </button>
           </div>
-          <div id="drawing-container" class="relative border h-400">
+          <div class="flex flex-row">
+            <div class="flex-none w-400 h-400">
+              <div id="drawing-container" class="relative">
+              </div>
+            </div>
+            <div style="margin-left: 420px;">
+              <div class="grid gap-y-2 grid-cols-1">
+                <div>
+                  <button onclick="clearSketch();"
+                    class="border border-indigo-600 px-12 py-3 text-sm font-medium hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500">
+                    Clear
+                  </button>
+                </div>
+                <div>
+                  <button onclick="drawTrialCurve();"
+                    class="border border-indigo-600 px-12 py-3 text-sm font-medium hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500">
+                    Draw Trial Curve
+                  </button>
+                </div>
+                <div>
+                  <button onclick="triggerDrawingFromVertices();"
+                    class="border border-indigo-600 px-12 py-3 text-sm font-medium hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500">
+                    Load to print
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
           </div>
+
         </div>
       </div>
       <!-- 3D sketch -->
